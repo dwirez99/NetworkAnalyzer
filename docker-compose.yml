@@ -1,0 +1,20 @@
+services:
+  backend:
+    build: ./package-sniffer-backend
+    container_name: packet_backend
+    network_mode: host # REQUIRED for Linux to see real WiFi/Ethernet
+    restart: always
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    environment:
+      # CHANGE THIS to your interface name (e.g., wlan0, eth0, en0)
+      - NETWORK_INTERFACE=${INTERFACE}
+
+  frontend:
+    build: ./packet-dashboard
+    container_name: packet_frontend
+    network_mode: host
+    depends_on:
+      - backend
